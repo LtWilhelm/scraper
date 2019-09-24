@@ -10,19 +10,20 @@ router.get('/scrape', (req, res) => {
         const $ = cheerio.load(result.data);
 
         $('.article').each((i, element) => {
-            const result = {};
+            let result = {};
 
-            result.title = $(this).find('h2').text();
+            result.title = $(this).find('a').text();
             result.description = $(this).find('.excerpt').text();
-            result.author = $(this).find('.byline a').text();
+            result.author = $(this).find('.byline').text();
             result.link = $(this).find('h2 a').attr('href');
 
-            db.Article.create(result).catch(err => {
-                console.log(err);
-            });
+            console.log(result)
+            // db.Article.create(result).catch(err => {
+            //     console.log(err);
+            // });
         });
 
-        res.status(200);
+        res.status(200).redirect('/');
     }).catch((err) => {
         console.log(err);
         res.status(500);
